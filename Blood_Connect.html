@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Blood Connect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f9f9f9;
+    }
+
+    .container {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-box {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .form-box h2 {
+      margin-bottom: 20px;
+      color: #d62828;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background: #d62828;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #a4161a;
+    }
+
+    .link {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .link a {
+      color: #f77f00;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    #main-site {
+      display: none;
+      padding: 20px;
+    }
+
+    header, footer {
+      text-align: center;
+      background: #d62828;
+      color: white;
+      padding: 15px;
+    }
+
+    nav {
+      text-align: center;
+      background: #f77f00;
+      padding: 10px;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .section {
+      margin: 20px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      max-width: 600px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sign-In -->
+  <div class="container" id="signin">
+    <div class="form-box">
+      <h2>Sign In</h2>
+      <input type="email" id="loginEmail" placeholder="Email" required />
+      <input type="password" id="loginPassword" placeholder="Password" required />
+      <button onclick="handleLogin()">Sign In</button>
+      <div class="link">Don't have an account? <a href="#" onclick="toggle('signup')">Sign up</a></div>
+    </div>
+  </div>
+
+  <!-- Sign-Up -->
+  <div class="container" id="signup">
+    <div class="form-box">
+      <h2>Sign Up</h2>
+      <input type="text" id="signupName" placeholder="Full Name" required />
+      <input type="email" id="signupEmail" placeholder="Email" required />
+      <input type="text" id="signupContact" placeholder="Contact No." required />
+      <select id="signupBloodGroup" required>
+        <option value="">Select Blood Group</option>
+        <option>A+</option><option>A-</option>
+        <option>B+</option><option>B-</option>
+        <option>O+</option><option>O-</option>
+        <option>AB+</option><option>AB-</option>
+      </select>
+      <input type="password" id="signupPassword" placeholder="Password" required />
+      <button onclick="handleSignup()">Sign Up</button>
+      <div class="link">Already have an account? <a href="#" onclick="toggle('signin')">Sign in</a></div>
+    </div>
+  </div>
+
+  <!-- Main Site -->
+  <div id="main-site">
+    <header>
+      <h1>Blood Connect</h1>
+      <p id="welcome">Welcome!</p>
+    </header>
+    <nav>
+      <a href="#request">Request</a>
+      <a href="#camp">Camps</a>
+    </nav>
+
+    <div class="section" id="request">
+      <h2>Blood Request Form</h2>
+      <input type="text" id="requestName" placeholder="Your Name" />
+      <input type="text" id="requestHospital" placeholder="Hospital Name" />
+      <select id="requestBloodGroup">
+        <option value="">Select Blood Group</option>
+        <option>A+</option><option>A-</option>
+        <option>B+</option><option>B-</option>
+        <option>O+</option><option>O-</option>
+        <option>AB+</option><option>AB-</option>
+      </select>
+      <input type="tel" id="requestContact" placeholder="Contact No." />
+      <button onclick="alert('Request submitted. Donors will be notified!')">Submit Request</button>
+    </div>
+
+    <div class="section" id="camp">
+      <h2>Upcoming Blood Donation Camps</h2>
+      <ul>
+        <li>Red Cross Hospital – May 10, 2025</li>
+        <li>Green Life Center – May 15, 2025</li>
+        <li>Metro Care – May 22, 2025</li>
+      </ul>
+    </div>
+
+    <footer>
+      &copy; 2025 Blood Connect
+    </footer>
+  </div>
+
+  <script>
+    // Initial view
+    document.getElementById("signin").style.display = "flex";
+
+    function toggle(view) {
+      document.getElementById("signin").style.display = "none";
+      document.getElementById("signup").style.display = "none";
+      document.getElementById(view).style.display = "flex";
+    }
+
+    function handleSignup() {
+      const name = document.getElementById("signupName").value;
+      const email = document.getElementById("signupEmail").value;
+      const contact = document.getElementById("signupContact").value;
+      const blood = document.getElementById("signupBloodGroup").value;
+      const password = document.getElementById("signupPassword").value;
+
+      if (!name || !email || !contact || !blood || !password) {
+        alert("All fields are required!");
+        return;
+      }
+
+      const user = { name, email, contact, blood, password };
+      localStorage.setItem(`user_${email}`, JSON.stringify(user));
+      alert("Sign-up successful. Please log in.");
+      toggle("signin");
+    }
+
+    function handleLogin() {
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+
+      const userData = localStorage.getItem(`user_${email}`);
+      if (!userData) {
+        alert("User not found.");
+        return;
+      }
+
+      const user = JSON.parse(userData);
+      if (user.password !== password) {
+        alert("Incorrect password.");
+        return;
+      }
+
+      // Successful login
+      document.getElementById("signin").style.display = "none";
+      document.getElementById("main-site").style.display = "block";
+      document.getElementById("welcome").innerText = `Welcome, ${user.name}!`;
+    }
+  </script>
+
+</body>
+</html>
